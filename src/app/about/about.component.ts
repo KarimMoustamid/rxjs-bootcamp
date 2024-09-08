@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
-import { fromEvent, interval, timer } from "rxjs";
+import { response } from "express";
+import { fromEvent, interval, Observable, timer } from "rxjs";
 
 @Component({
   selector: "about",
@@ -39,5 +40,29 @@ export class AboutComponent implements OnInit {
     );
 
     subClick.unsubscribe();
+
+    // Test Fetching courses from localhost:9000/api/courses :
+
+    // {Promice} :
+    const url = "/api/courses";
+    var data = fetch(url);
+
+    // Observable :
+    var data$ = new Observable((observer) => {
+      fetch(url)
+        .then((response) => {
+          return response.json();
+        })
+        .then((body) => {
+          observer.next(body);
+          observer.complete();
+        })
+        .catch((e) => {
+          observer.error(e);
+        });
+    });
+
+    // data$.subscribe( v =>
+    // );
   }
 }
